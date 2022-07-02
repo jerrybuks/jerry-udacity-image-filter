@@ -1,6 +1,7 @@
 import express,{Request, Response} from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import { AxiosError } from 'axios';
 
 (async () => {
 
@@ -27,8 +28,9 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
          deleteLocalFiles([filePath]);
       });
      
-    } catch (error: any) {
-      res.status(error.response.status).send(`${error.response.statusText}`);
+    } catch (e) {
+      const error = e as unknown as AxiosError;
+      return res.status(error.response.status).send(`${error.response.statusText}`);
     } 
   })
 
